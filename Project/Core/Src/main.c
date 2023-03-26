@@ -19,12 +19,19 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
+#include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdio.h"
+#include "oled.h"
+#include "ds18b20.h"
+#include "warning.h"
+#include "addheat.h"
+#include "bmp280.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,7 +73,12 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uint8_t x = 0;
+	uint8_t y = 0;
+	float temperatureValue = 0;
+	uint8_t temperatureIntegerValue = 0;
+	uint8_t temperatureDecimalValue = 0;
+	uint8_t temperatureLimitValue = 20;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -89,14 +101,53 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_TIM1_Init();
+  MX_USART1_UART_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+	OLED_Init();
+	OLED_Clear();
+	OLED_ShowChinese(x + 16 + 16 * 0, y * 2 * 0, 0);
+	OLED_ShowChinese(x + 16 + 16 * 1, y * 2 * 0, 1);
+	OLED_ShowChinese(x + 16 + 16 * 2, y * 2 * 0, 2);
+	OLED_ShowChinese(x + 16 + 16 * 3, y * 2 * 0, 3);
+	OLED_ShowChinese(x + 16 + 16 * 4, y * 2 * 0, 4);
+	OLED_ShowChinese(x + 16 + 16 * 5, y * 2 * 0, 5);
+	OLED_ShowChinese(x + 16 + 16 * 0, y * 2 * 1, 6);
+	OLED_ShowChinese(x + 16 + 16 * 1, y * 2 * 1, 7);
+	OLED_ShowChinese(x + 16 + 16 * 2, y * 2 * 1, 8);
+	OLED_ShowChinese(x + 16 + 16 * 3, y * 2 * 1, 9);
+	OLED_ShowChinese(x + 16 + 16 * 4, y * 2 * 1, 10);
+	OLED_ShowChinese(x + 16 + 16 * 5, y * 2 * 1, 11);
+	OLED_ShowChinese(x + 16 * 0, y + 2 * 2, 12);
+	OLED_ShowChinese(x + 16 * 1, y + 2 * 2, 13);
+	OLED_ShowChinese(x + 16 * 2, y + 2 * 2, 14);
+	OLED_ShowChinese(x + 16 * 3, y + 2 * 2, 15);
+	OLED_ShowChar(x + 16 * 3 + 8 * 1, y + 2 * 2, ':', 16);
+	OLED_ShowChinese(x + 16 * 0, y + 2 * 3, 12);
+	OLED_ShowChinese(x + 16 * 1, y + 2 * 3, 13);
+	OLED_ShowChinese(x + 16 * 2, y + 2 * 3, 16);
+	OLED_ShowChinese(x + 16 * 3, y + 2 * 3, 17);
+	OLED_ShowChinese(x + 16 * 4, y + 2 * 3, 18);
+	OLED_ShowChar(x + 16 * 4 + 8 * 1, y + 2 * 3, ':', 16);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		temperatureValue = DS18B20_GetTemperture();
+		temperatureIntegerValue = (int)temperatureValue;
+		temperatureDecimalValue = 10 * (temperatureValue - (int)temperatureValue);
+		OLED_ShowNum(x + 16 * 3 + 8 * 2, y + 2 * 2, temperatureIntegerValue, 2, 16);
+		OLED_ShowChar(x + 16 * 3 + 8 * 4, y + 2 * 2, '.', 16);
+		OLED_ShowNum(x + 16 * 3 + 8 * 5, y + 2 * 2, temperatureDecimalValue, 1, 16);
+		OLED_ShowChar(x + 16 * 3 + 8 * 6, y + 2 * 2, 'C', 16);
+		
+		if(temperatureValue<temperatureLimitValue)
+		{
+			warning();
+			addHeat();
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
