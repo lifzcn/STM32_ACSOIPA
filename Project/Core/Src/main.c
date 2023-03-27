@@ -159,7 +159,7 @@ int main(void)
 		
 		kelvinTemperatureValue = 237.15 + temperatureValue;
 		pressureValue = BMP280_GetPressure();
-		oxygenSolubilityValue = (pressureValue / standardAtmosphericPressureValue) * (477.8 / (kelvinTemperatureValue + 32.26));
+		oxygenSolubilityValue = (pressureValue / standardAtmosphericPressureValue) * (477.8 / (temperatureValue + 32.26));
 		oxygenSolubilityIntegerValue = (int)oxygenSolubilityValue;
 		oxygenSolubilityDecimalValue = 10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue);
 		OLED_ShowNum(x + 16 * 4 + 8 * 2, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
