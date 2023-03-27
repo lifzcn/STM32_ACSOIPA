@@ -79,6 +79,9 @@ int main(void)
 	uint8_t temperatureIntegerValue = 0;
 	uint8_t temperatureDecimalValue = 0;
 	uint8_t temperatureLimitValue = 20;
+	float pressureValue = 0;
+	uint8_t pressureIntegerValue = 0;
+	uint8_t pressureDecimalValue = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -129,6 +132,8 @@ int main(void)
 	OLED_ShowChinese(x + 16 * 3, y + 2 * 3, 17);
 	OLED_ShowChinese(x + 16 * 4, y + 2 * 3, 18);
 	OLED_ShowChar(x + 16 * 4 + 8 * 1, y + 2 * 3, ':', 16);
+	
+	BMP280_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -148,6 +153,15 @@ int main(void)
 			warning();
 			addHeat();
 		}
+		
+		pressureValue = BMP280_GetPressure();
+		pressureIntegerValue = (int)pressureValue;
+		pressureDecimalValue = 10 * (pressureValue - (int)pressureValue);
+		OLED_ShowNum(x + 16 * 4 + 8 * 2, y + 2 * 3, pressureIntegerValue, 2, 16);
+		OLED_ShowChar(x + 16 * 4 + 8 * 4, y + 2 * 3, '.', 16);
+		OLED_ShowNum(x + 16 * 4 + 8 * 5, y + 2 * 3, pressureDecimalValue, 1, 16);
+		OLED_ShowChar(x + 16 * 4 + 8 * 6, y + 2 * 3, 'P', 16);
+		OLED_ShowChar(x + 16 * 4 + 8 * 7, y + 2 * 3, 'a', 16);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
