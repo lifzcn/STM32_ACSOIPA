@@ -52,7 +52,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+BMP280_HandleTypedef bmp280;
+float pressure, temperature, humidity;
+uint16_t sizeValue;
+uint8_t dataValue[256];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,6 +112,7 @@ int main(void)
   MX_TIM1_Init();
   MX_USART1_UART_Init();
   MX_SPI1_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 	OLED_Init();
 	OLED_Clear();
@@ -136,7 +140,17 @@ int main(void)
 	OLED_ShowChinese(x + 16 * 4, y + 2 * 3, 18);
 	OLED_ShowChar(x + 16 * 4 + 8 * 2, y + 2 * 3, ':', 16);
 	
-	BMP280_Init();
+	bmp280_init_default_params(&bmp280.params);
+	bmp280.addr = BMP280_I2C_ADDRESS_0;
+	bmp280.i2c = &hi2c1;
+	while (!bmp280_init(&bmp280, &bmp280.params)) {
+		sizeValue = sprintf((char *)dataValue, "BMP280 initialization failed\n");
+		HAL_UART_Transmit(&huart1, dataValue, sizeValue, 1000);
+		HAL_Delay(2000);
+	}
+	bool bme280p = bmp280.id == BME280_CHIP_ID;
+	sizeValue = sprintf((char *)dataValue, "BMP280: found %s\n", bme280p?"BME280":"BMP280");
+	HAL_UART_Transmit(&huart1, dataValue, sizeValue, 1000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -158,8 +172,27 @@ int main(void)
 		}
 		
 		kelvinTemperatureValue = 237.15 + temperatureValue;
-		pressureValue = BMP280_GetPressure();
-		oxygenSolubilityValue = (pressureValue / standardAtmosphericPressureValue) * (477.8 / (temperatureValue + 32.26));
+		
+		while(!bmp280_read_float(&bmp280, &temperature, &pressure, &humidity))
+		{
+			sizeValue = sprintf((char *)dataValue, "Temperature/pressure reading failed!\n");
+			HAL_UART_Transmit(&huart1, dataValue, sizeValue, 1000);
+			HAL_Delay(2000);
+		}
+		sizeValue = sprintf((char *)dataValue,"Pressure: %.2f Pa, Temperature: %.2f C", pressure, temperature);
+		HAL_UART_Transmit(&huart1, dataValue, sizeValue, 1000);
+		if(bme280p)
+		{
+			sizeValue = sprintf((char *)dataValue,", Humidity: %.2f\n", humidity);
+			HAL_UART_Transmit(&huart1, dataValue, sizeValue, 1000);
+		}
+		else
+		{
+			sizeValue = sprintf((char *)dataValue, "\n");
+			HAL_UART_Transmit(&huart1, dataValue, sizeValue, 1000);
+		}
+		
+		oxygenSolubilityValue = (pressure / standardAtmosphericPressureValue) * (477.8 / (temperatureValue + 32.26));
 		oxygenSolubilityIntegerValue = (int)oxygenSolubilityValue;
 		oxygenSolubilityDecimalValue = 10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue);
 		OLED_ShowNum(x + 16 * 4 + 8 * 3, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);

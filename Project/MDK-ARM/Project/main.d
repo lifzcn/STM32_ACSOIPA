@@ -34,4 +34,4 @@ project/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Core\Inc\usart.h ..\Core\Inc\gpio.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h ..\Core\Inc\oled.h \
   ..\Core\Inc\ds18b20.h ..\Core\Inc\warning.h ..\Core\Inc\addheat.h \
-  ..\Core\Inc\bmp280.h
+  ..\Core\Inc\bmp280.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h
