@@ -76,12 +76,15 @@ int main(void)
 	uint8_t x = 0;
 	uint8_t y = 0;
 	float temperatureValue = 0;
+	float kelvinTemperatureValue = 0;
 	uint8_t temperatureIntegerValue = 0;
 	uint8_t temperatureDecimalValue = 0;
 	uint8_t temperatureLimitValue = 20;
 	float pressureValue = 0;
-	uint8_t pressureIntegerValue = 0;
-	uint8_t pressureDecimalValue = 0;
+	float standardAtmosphericPressureValue = 101.325e3;
+	float oxygenSolubilityValue = 0;
+	uint8_t oxygenSolubilityIntegerValue = 0;
+	uint8_t oxygenSolubilityDecimalValue = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -154,14 +157,15 @@ int main(void)
 			addHeat();
 		}
 		
+		kelvinTemperatureValue = 237.15 + temperatureValue;
 		pressureValue = BMP280_GetPressure();
-		pressureIntegerValue = (int)pressureValue;
-		pressureDecimalValue = 10 * (pressureValue - (int)pressureValue);
-		OLED_ShowNum(x + 16 * 4 + 8 * 2, y + 2 * 3, pressureIntegerValue, 2, 16);
+		oxygenSolubilityValue = (pressureValue / standardAtmosphericPressureValue) * (477.8 / (kelvinTemperatureValue + 32.26));
+		oxygenSolubilityIntegerValue = (int)oxygenSolubilityValue;
+		oxygenSolubilityDecimalValue = 10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue);
+		OLED_ShowNum(x + 16 * 4 + 8 * 2, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
 		OLED_ShowChar(x + 16 * 4 + 8 * 4, y + 2 * 3, '.', 16);
-		OLED_ShowNum(x + 16 * 4 + 8 * 5, y + 2 * 3, pressureDecimalValue, 1, 16);
-		OLED_ShowChar(x + 16 * 4 + 8 * 6, y + 2 * 3, 'P', 16);
-		OLED_ShowChar(x + 16 * 4 + 8 * 7, y + 2 * 3, 'a', 16);
+		OLED_ShowNum(x + 16 * 4 + 8 * 5, y + 2 * 3, oxygenSolubilityDecimalValue, 1, 16);
+		OLED_ShowChar(x + 16 * 4 + 8 * 6, y + 2 * 3, '%', 16);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
