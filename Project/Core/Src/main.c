@@ -112,29 +112,29 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	OLED_Init();
 	OLED_Clear();
-	OLED_ShowChinese(x + 16 + 16 * 0, y * 2 * 0, 0);
-	OLED_ShowChinese(x + 16 + 16 * 1, y * 2 * 0, 1);
-	OLED_ShowChinese(x + 16 + 16 * 2, y * 2 * 0, 2);
-	OLED_ShowChinese(x + 16 + 16 * 3, y * 2 * 0, 3);
-	OLED_ShowChinese(x + 16 + 16 * 4, y * 2 * 0, 4);
-	OLED_ShowChinese(x + 16 + 16 * 5, y * 2 * 0, 5);
-	OLED_ShowChinese(x + 16 + 16 * 0, y * 2 * 1, 6);
-	OLED_ShowChinese(x + 16 + 16 * 1, y * 2 * 1, 7);
-	OLED_ShowChinese(x + 16 + 16 * 2, y * 2 * 1, 8);
-	OLED_ShowChinese(x + 16 + 16 * 3, y * 2 * 1, 9);
-	OLED_ShowChinese(x + 16 + 16 * 4, y * 2 * 1, 10);
-	OLED_ShowChinese(x + 16 + 16 * 5, y * 2 * 1, 11);
+	OLED_ShowChinese(x + 16 + 16 * 0, y + 2 * 0, 0);
+	OLED_ShowChinese(x + 16 + 16 * 1, y + 2 * 0, 1);
+	OLED_ShowChinese(x + 16 + 16 * 2, y + 2 * 0, 2);
+	OLED_ShowChinese(x + 16 + 16 * 3, y + 2 * 0, 3);
+	OLED_ShowChinese(x + 16 + 16 * 4, y + 2 * 0, 4);
+	OLED_ShowChinese(x + 16 + 16 * 5, y + 2 * 0, 5);
+	OLED_ShowChinese(x + 16 + 16 * 0, y + 2 * 1, 6);
+	OLED_ShowChinese(x + 16 + 16 * 1, y + 2 * 1, 7);
+	OLED_ShowChinese(x + 16 + 16 * 2, y + 2 * 1, 8);
+	OLED_ShowChinese(x + 16 + 16 * 3, y + 2 * 1, 9);
+	OLED_ShowChinese(x + 16 + 16 * 4, y + 2 * 1, 10);
+	OLED_ShowChinese(x + 16 + 16 * 5, y + 2 * 1, 11);
 	OLED_ShowChinese(x + 16 * 0, y + 2 * 2, 12);
 	OLED_ShowChinese(x + 16 * 1, y + 2 * 2, 13);
 	OLED_ShowChinese(x + 16 * 2, y + 2 * 2, 14);
 	OLED_ShowChinese(x + 16 * 3, y + 2 * 2, 15);
-	OLED_ShowChar(x + 16 * 3 + 8 * 1, y + 2 * 2, ':', 16);
+	OLED_ShowChar(x + 16 * 3 + 8 * 2, y + 2 * 2, ':', 16);
 	OLED_ShowChinese(x + 16 * 0, y + 2 * 3, 12);
 	OLED_ShowChinese(x + 16 * 1, y + 2 * 3, 13);
 	OLED_ShowChinese(x + 16 * 2, y + 2 * 3, 16);
 	OLED_ShowChinese(x + 16 * 3, y + 2 * 3, 17);
 	OLED_ShowChinese(x + 16 * 4, y + 2 * 3, 18);
-	OLED_ShowChar(x + 16 * 4 + 8 * 1, y + 2 * 3, ':', 16);
+	OLED_ShowChar(x + 16 * 4 + 8 * 2, y + 2 * 3, ':', 16);
 	
 	BMP280_Init();
   /* USER CODE END 2 */
@@ -146,10 +146,10 @@ int main(void)
 		temperatureValue = DS18B20_GetTemperture();
 		temperatureIntegerValue = (int)temperatureValue;
 		temperatureDecimalValue = 10 * (temperatureValue - (int)temperatureValue);
-		OLED_ShowNum(x + 16 * 3 + 8 * 2, y + 2 * 2, temperatureIntegerValue, 2, 16);
-		OLED_ShowChar(x + 16 * 3 + 8 * 4, y + 2 * 2, '.', 16);
-		OLED_ShowNum(x + 16 * 3 + 8 * 5, y + 2 * 2, temperatureDecimalValue, 1, 16);
-		OLED_ShowChar(x + 16 * 3 + 8 * 6, y + 2 * 2, 'C', 16);
+		OLED_ShowNum(x + 16 * 3 + 8 * 3, y + 2 * 2, temperatureIntegerValue, 2, 16);
+		OLED_ShowChar(x + 16 * 3 + 8 * 5, y + 2 * 2, '.', 16);
+		OLED_ShowNum(x + 16 * 3 + 8 * 6, y + 2 * 2, temperatureDecimalValue, 1, 16);
+		OLED_ShowChar(x + 16 * 3 + 8 * 7, y + 2 * 2, 'C', 16);
 		
 		if(temperatureValue<temperatureLimitValue)
 		{
@@ -162,10 +162,10 @@ int main(void)
 		oxygenSolubilityValue = (pressureValue / standardAtmosphericPressureValue) * (477.8 / (temperatureValue + 32.26));
 		oxygenSolubilityIntegerValue = (int)oxygenSolubilityValue;
 		oxygenSolubilityDecimalValue = 10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue);
-		OLED_ShowNum(x + 16 * 4 + 8 * 2, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
-		OLED_ShowChar(x + 16 * 4 + 8 * 4, y + 2 * 3, '.', 16);
-		OLED_ShowNum(x + 16 * 4 + 8 * 5, y + 2 * 3, oxygenSolubilityDecimalValue, 1, 16);
-		OLED_ShowChar(x + 16 * 4 + 8 * 6, y + 2 * 3, '%', 16);
+		OLED_ShowNum(x + 16 * 4 + 8 * 3, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
+		OLED_ShowChar(x + 16 * 4 + 8 * 5, y + 2 * 3, '.', 16);
+		OLED_ShowNum(x + 16 * 4 + 8 * 6, y + 2 * 3, oxygenSolubilityDecimalValue, 1, 16);
+		OLED_ShowChar(x + 16 * 4 + 8 * 7, y + 2 * 3, '%', 16);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
