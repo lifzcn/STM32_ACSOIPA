@@ -133,12 +133,11 @@ int main(void)
 	OLED_ShowChinese(x + 16 * 2, y + 2 * 2, 14);
 	OLED_ShowChinese(x + 16 * 3, y + 2 * 2, 15);
 	OLED_ShowChar(x + 16 * 3 + 8 * 2, y + 2 * 2, ':', 16);
-	OLED_ShowChinese(x + 16 * 0, y + 2 * 3, 12);
-	OLED_ShowChinese(x + 16 * 1, y + 2 * 3, 13);
-	OLED_ShowChinese(x + 16 * 2, y + 2 * 3, 16);
-	OLED_ShowChinese(x + 16 * 3, y + 2 * 3, 17);
-	OLED_ShowChinese(x + 16 * 4, y + 2 * 3, 18);
-	OLED_ShowChar(x + 16 * 4 + 8 * 2, y + 2 * 3, ':', 16);
+	OLED_ShowChinese(x + 16 * 0, y + 2 * 3, 16);
+	OLED_ShowChinese(x + 16 * 1, y + 2 * 3, 17);
+	OLED_ShowChar(x + 16 * 2 + 8 * 0, y + 2 * 3, 'C', 16);
+	OLED_ShowChar(x + 16 * 2 + 8 * 1, y + 2 * 3, 's', 16);
+	OLED_ShowChar(x + 16 * 2 + 8 * 2, y + 2 * 3, ':', 16);
 	
 	bmp280_init_default_params(&bmp280.params);
 	bmp280.addr = BMP280_I2C_ADDRESS_0;
@@ -195,10 +194,13 @@ int main(void)
 		oxygenSolubilityValue = (pressure / standardAtmosphericPressureValue) * (477.8 / (temperatureValue + 32.26));
 		oxygenSolubilityIntegerValue = (int)oxygenSolubilityValue;
 		oxygenSolubilityDecimalValue = 10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue);
-		OLED_ShowNum(x + 16 * 4 + 8 * 3, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
-		OLED_ShowChar(x + 16 * 4 + 8 * 5, y + 2 * 3, '.', 16);
-		OLED_ShowNum(x + 16 * 4 + 8 * 6, y + 2 * 3, oxygenSolubilityDecimalValue, 1, 16);
-		OLED_ShowChar(x + 16 * 4 + 8 * 7, y + 2 * 3, '%', 16);
+		OLED_ShowNum(x + 16 * 2 + 8 * 3, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 5, y + 2 * 3, '.', 16);
+		OLED_ShowNum(x + 16 * 2 + 8 * 6, y + 2 * 3, oxygenSolubilityDecimalValue, 1, 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 7, y + 2 * 3, 'm', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 8, y + 2 * 3, 'g', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 9, y + 2 * 3, '/', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 10, y + 2 * 3, 'L', 16);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
