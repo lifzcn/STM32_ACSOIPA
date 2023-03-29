@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
-#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -32,6 +31,7 @@
 #include "warning.h"
 #include "addheat.h"
 #include "bmp280.h"
+#include "motorexecution.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -89,6 +89,7 @@ int main(void)
 	uint8_t oxygenSolubilityIntegerValue = 0;
 	uint8_t oxygenSolubilityDecimalValue_1 = 0;
 	uint8_t oxygenSolubilityDecimalValue_2 = 0;
+	uint8_t oxygenSolubilityLimitValue = 5;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -112,7 +113,6 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM1_Init();
   MX_USART1_UART_Init();
-  MX_SPI1_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 	OLED_Init();
@@ -204,6 +204,11 @@ int main(void)
 		OLED_ShowChar(x + 16 * 2 + 8 * 9, y + 2 * 3, 'g', 16);
 		OLED_ShowChar(x + 16 * 2 + 8 * 10, y + 2 * 3, '/', 16);
 		OLED_ShowChar(x + 16 * 2 + 8 * 11, y + 2 * 3, 'L', 16);
+		
+		if(oxygenSolubilityValue<oxygenSolubilityLimitValue)
+		{
+			MotorExecution();
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
