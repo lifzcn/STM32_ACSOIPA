@@ -82,14 +82,15 @@ int main(void)
 	float kelvinTemperatureValue = 0;
 	uint8_t temperatureIntegerValue = 0;
 	uint8_t temperatureDecimalValue = 0;
-	uint8_t temperatureLimitValue = 20;
+	uint8_t temperatureLowLimitValue = 20;//温度下限
+	uint8_t temperatureHighLimitValue = 30;//温度上限
 	float pressureValue = 0;
 	float standardAtmosphericPressureValue = 101.325e3;
 	float oxygenSolubilityValue = 0;
 	uint8_t oxygenSolubilityIntegerValue = 0;
 	uint8_t oxygenSolubilityDecimalValue_1 = 0;
 	uint8_t oxygenSolubilityDecimalValue_2 = 0;
-	uint8_t oxygenSolubilityLimitValue = 5;
+	uint8_t oxygenSolubilityLimitValue = 5;//溶解氧极限值
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -123,16 +124,21 @@ int main(void)
 	OLED_ShowChinese(x + 16 + 16 * 3, y + 2 * 0, 3);
 	OLED_ShowChinese(x + 16 + 16 * 4, y + 2 * 0, 4);
 	OLED_ShowChinese(x + 16 + 16 * 5, y + 2 * 0, 5);
-	OLED_ShowChinese(x + 16 + 16 * 0, y + 2 * 1, 6);
-	OLED_ShowChinese(x + 16 + 16 * 1, y + 2 * 1, 7);
-	OLED_ShowChinese(x + 16 + 16 * 2, y + 2 * 1, 8);
-	OLED_ShowChinese(x + 16 + 16 * 3, y + 2 * 1, 9);
-	OLED_ShowChinese(x + 16 + 16 * 4, y + 2 * 1, 10);
-	OLED_ShowChinese(x + 16 + 16 * 5, y + 2 * 1, 11);
+//	OLED_ShowChinese(x + 16 + 16 * 0, y + 2 * 1, 6);
+//	OLED_ShowChinese(x + 16 + 16 * 1, y + 2 * 1, 7);
+//	OLED_ShowChinese(x + 16 + 16 * 2, y + 2 * 1, 8);
+//	OLED_ShowChinese(x + 16 + 16 * 3, y + 2 * 1, 9);
+//	OLED_ShowChinese(x + 16 + 16 * 4, y + 2 * 1, 10);
+//	OLED_ShowChinese(x + 16 + 16 * 5, y + 2 * 1, 11);
+	OLED_ShowChinese(x + 16 * 0, y + 2 * 1, 12);
+	OLED_ShowChinese(x + 16 * 1, y + 2 * 1, 13);
+	OLED_ShowChinese(x + 16 * 2, y + 2 * 1, 14);
+	OLED_ShowChinese(x + 16 * 3, y + 2 * 1, 15);
+	OLED_ShowChar(x + 16 * 3 + 8 * 2, y + 2 * 1, ':', 16);
 	OLED_ShowChinese(x + 16 * 0, y + 2 * 2, 12);
 	OLED_ShowChinese(x + 16 * 1, y + 2 * 2, 13);
-	OLED_ShowChinese(x + 16 * 2, y + 2 * 2, 14);
-	OLED_ShowChinese(x + 16 * 3, y + 2 * 2, 15);
+	OLED_ShowChinese(x + 16 * 2, y + 2 * 2, 16);
+	OLED_ShowChinese(x + 16 * 3, y + 2 * 2, 17);
 	OLED_ShowChar(x + 16 * 3 + 8 * 2, y + 2 * 2, ':', 16);
 	OLED_ShowChinese(x + 16 * 0, y + 2 * 3, 16);
 	OLED_ShowChinese(x + 16 * 1, y + 2 * 3, 17);
@@ -165,10 +171,14 @@ int main(void)
 		OLED_ShowNum(x + 16 * 3 + 8 * 6, y + 2 * 2, temperatureDecimalValue, 1, 16);
 		OLED_ShowChar(x + 16 * 3 + 8 * 7, y + 2 * 2, 'C', 16);
 		
-		if(temperatureValue<temperatureLimitValue)
+		if(temperatureValue<temperatureLowLimitValue)//温度低于20度，报警并加热
 		{
 			warning();
 			addHeat();
+		}
+		else if(temperatureValue>temperatureHighLimitValue)//温度高于30度，报警
+		{
+			warning();
 		}
 		
 		kelvinTemperatureValue = 237.15 + temperatureValue;
@@ -192,6 +202,12 @@ int main(void)
 			HAL_UART_Transmit(&huart1, dataValue, sizeValue, 1000);
 		}
 		
+		pressureValue = pressure;
+		OLED_ShowNum(x + 16 * 3 + 8 * 3, y + 2 * 2, pressureValue/1000, 6, 16);
+		OLED_ShowChar(x + 16 * 3 + 8 * 9, y + 2 * 2, 'k', 16);
+		OLED_ShowChar(x + 16 * 3 + 8 * 10, y + 2 * 2, 'P', 16);
+		OLED_ShowChar(x + 16 * 3 + 8 * 11, y + 2 * 2, 'a', 16);
+		
 		oxygenSolubilityValue = (pressure / standardAtmosphericPressureValue) * (477.8 / (temperatureValue + 32.26));
 		oxygenSolubilityIntegerValue = (int)oxygenSolubilityValue;
 		oxygenSolubilityDecimalValue_1 = 10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue);
@@ -205,7 +221,7 @@ int main(void)
 		OLED_ShowChar(x + 16 * 2 + 8 * 10, y + 2 * 3, '/', 16);
 		OLED_ShowChar(x + 16 * 2 + 8 * 11, y + 2 * 3, 'L', 16);
 		
-		if(oxygenSolubilityValue<oxygenSolubilityLimitValue)
+		if(oxygenSolubilityValue<oxygenSolubilityLimitValue)//溶解氧低于5mg/L，步进电机转动
 		{
 			MotorExecution();
 		}
