@@ -193,23 +193,23 @@ int main(void)
 		}
 		
 		pressureValue = pressure;
-		OLED_ShowNum(x + 16 * 2 + 8 * 1, y + 2 * 2, pressureValue/1000, 6, 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 7, y + 2 * 2, 'k', 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 8, y + 2 * 2, 'P', 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 9, y + 2 * 2, 'a', 16);
+		OLED_ShowNum(x + 16 * 2 + 8 * 1, y + 2 * 2, pressureValue/1000, 4, 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 5, y + 2 * 2, 'k', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 6, y + 2 * 2, 'P', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 7, y + 2 * 2, 'a', 16);
 		
 		oxygenSolubilityValue = (pressure / standardAtmosphericPressureValue) * (477.8 / (temperatureValue + 32.26));
 		oxygenSolubilityIntegerValue = (int)oxygenSolubilityValue;
 		oxygenSolubilityDecimalValue_1 = 10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue);
 		oxygenSolubilityDecimalValue_2 = 10 * (10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue) - (int)(10 * (oxygenSolubilityValue - (int)oxygenSolubilityValue)));
-		OLED_ShowNum(x + 16 * 2 + 8 * 1, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 3, y + 2 * 3, '.', 16);
-		OLED_ShowNum(x + 16 * 2 + 8 * 4, y + 2 * 3, oxygenSolubilityDecimalValue_1, 1, 16);
-		OLED_ShowNum(x + 16 * 2 + 8 * 5, y + 2 * 3, oxygenSolubilityDecimalValue_2, 1, 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 6, y + 2 * 3, 'm', 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 7, y + 2 * 3, 'g', 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 8, y + 2 * 3, '/', 16);
-		OLED_ShowChar(x + 16 * 2 + 8 * 9, y + 2 * 3, 'L', 16);
+		OLED_ShowNum(x + 16 * 2 + 8 * 3, y + 2 * 3, oxygenSolubilityIntegerValue, 2, 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 5, y + 2 * 3, '.', 16);
+		OLED_ShowNum(x + 16 * 2 + 8 * 6, y + 2 * 3, oxygenSolubilityDecimalValue_1, 1, 16);
+		OLED_ShowNum(x + 16 * 2 + 8 * 7, y + 2 * 3, oxygenSolubilityDecimalValue_2, 1, 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 8, y + 2 * 3, 'm', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 9, y + 2 * 3, 'g', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 10, y + 2 * 3, '/', 16);
+		OLED_ShowChar(x + 16 * 2 + 8 * 11, y + 2 * 3, 'L', 16);
 		
 		if(oxygenSolubilityValue<oxygenSolubilityLimitValue)//溶解氧低于5mg/L，步进电机转动
 		{
